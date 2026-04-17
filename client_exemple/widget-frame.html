@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widget Karticle</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }
+
+      .frame-shell {
+        width: min(360px, 100vw);
+        padding: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame-shell">
+      <div
+        id="karticle-widget-slot"
+        data-karticle-widget
+        data-karticle-button-label="Unlock with Karticle for €1.99"
+      ></div>
+    </div>
+    <script type="module" src="../frontend/dist/karticle-widget.js"></script>
+  </body>
+</html>

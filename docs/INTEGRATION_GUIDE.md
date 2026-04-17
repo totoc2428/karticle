@@ -1,33 +1,40 @@
 # Publisher Integration Guide
 
-## 1. Include the widget bundle
+## 1. Embed the widget in an iframe
+
+The recommended integration is a dedicated iframe hosted in the publisher paywall area.
 
 ```html
-<script src="https://cdn.example.com/karticle-widget.js" defer></script>
+<iframe
+  title="Karticle widget"
+  src="https://cdn.example.com/karticle/widget-frame.html?karticle_publisher_id=publisher-123&karticle_article_id=article-456&karticle_article_url=https%3A%2F%2Fpublisher.example%2Fnews%2Farticle-456&karticle_article_hash=hash_article_456&karticle_amount_cents=250&karticle_currency=EUR"
+></iframe>
 ```
 
-## 2. Add a container where the button should appear
+The widget reads its context from:
+
+1. query parameters,
+2. `postMessage`,
+3. `document.referrer` as fallback.
+
+## 2. Add a locked premium container
 
 ```html
-<div
-  id="karticle-paywall-slot"
-  data-karticle-widget
-  data-karticle-publisher-id="publisher-123"
-  data-karticle-article-id="article-456"
-  data-karticle-amount-cents="250"
-  data-karticle-currency="EUR"
-  data-karticle-button-label="Unlock this article for 2.50 EUR"
-></div>
+<div data-premium-content class="is-locked">
+  <p>Premium article content goes here.</p>
+</div>
 ```
 
-## 3. Listen for unlock event
+## 3. Listen for unlock events from the iframe
 
 ```html
 <script>
-  window.addEventListener("karticle:unlocked", async (event) => {
-    const { articleId, paymentId } = event.detail;
-    console.log("Unlocked", articleId, paymentId);
-    // Replace this by your own content-unlock implementation.
+  window.addEventListener("message", (event) => {
+    if (!event.data || event.data.type !== "karticle:unlocked") {
+      return;
+    }
+
+    console.log("Unlocked article", event.data.payload);
     document
       .querySelector("[data-premium-content]")
       ?.classList.remove("is-locked");
@@ -37,10 +44,14 @@
 
 ## 4. Verify unlock token server-side
 
-For production, verify unlock tokens on your backend before exposing premium content.
+For production, verify the unlock cookie/token on your backend before exposing premium content.
 
-## 5. Troubleshooting
+## 5. Example site
 
-- Button does not appear: check script URL and container attributes.
-- API errors: verify CORS and API base URL.
-- Token rejected: ensure same `article_id` and valid token TTL.
+See `client_exemple/` for a full static example article page with a paywall iframe.
+
+## 6. Troubleshooting
+
+- The widget does not render: ensure the iframe points to the built widget bundle.
+- The article does not unlock: verify the parent page listens for the `karticle:unlocked` message.
+- API errors: verify CORS, API base URL, and iframe context parameters.

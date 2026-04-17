@@ -1,0 +1,130 @@
+:root {
+  --page-bg: #eef4fb;
+  --article-bg: #ffffff;
+  --article-text: #1f2933;
+  --article-muted: #5b6b7d;
+  --accent: #014f86;
+  --accent-soft: #dcecff;
+  --shadow: 0 18px 40px rgba(1, 58, 99, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    Segoe UI,
+    Tahoma,
+    sans-serif;
+  background: linear-gradient(180deg, #f5f9ff 0%, var(--page-bg) 100%);
+  color: var(--article-text);
+}
+
+.page-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.article-layout {
+  width: min(980px, 100%);
+  background: var(--article-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+.article-header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.article-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
+}
+
+.article-meta {
+  margin: 0.75rem 0 0;
+  color: var(--article-muted);
+}
+
+.article-body {
+  display: grid;
+  gap: 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.premium-block {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  align-items: start;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid #d6e4f2;
+  background: #fbfdff;
+}
+
+.premium-block.is-locked {
+  background: linear-gradient(180deg, #fbfdff 0%, #f3f8ff 100%);
+}
+
+.premium-copy h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.premium-copy p {
+  margin: 0;
+  color: var(--article-muted);
+}
+
+.iframe-shell {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #d7e6f6;
+  background: var(--accent-soft);
+  min-height: 240px;
+}
+
+.iframe-shell iframe {
+  width: 100%;
+  min-height: 260px;
+  border: 0;
+  display: block;
+  background: transparent;
+}
+
+.article-unlocked-note {
+  grid-column: 1 / -1;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: #eaf7ee;
+  color: #0a5a32;
+}
+
+@media (max-width: 900px) {
+  .premium-block {
+    grid-template-columns: 1fr;
+  }
+
+  .article-layout {
+    padding: 1.25rem;
+  }
+}

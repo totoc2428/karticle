@@ -56,6 +56,18 @@ export function WidgetApp({ config, onUnlocked }: WidgetAppProps): JSX.Element {
       setPaymentId(startResult.paymentId);
       if (completionResult.unlockToken || completionResult.processed) {
         onUnlocked?.(startResult.paymentId);
+        window.parent.postMessage(
+          {
+            type: "karticle:unlocked",
+            payload: {
+              paymentId: startResult.paymentId,
+              articleId: config.articleId,
+              publisherId: config.publisherId,
+              articleHash: config.articleHash,
+            },
+          },
+          "*",
+        );
       }
       window.dispatchEvent(
         new CustomEvent("karticle:unlocked", {
