@@ -1,12 +1,15 @@
 import { useMemo, useState } from "react";
-import { createPaymentIntent } from "../services/api";
+import { completePaymentSession, startPaymentSession } from "../services/api";
 import "./styles.css";
 
 export interface WidgetConfig {
   publisherId: string;
   articleId: string;
+  articleUrl: string;
+  articleHash: string;
   amountCents: number;
   currency: string;
+  returnUrl?: string;
   buttonLabel?: string;
 }
 
@@ -33,22 +36,34 @@ export function WidgetApp({ config, onUnlocked }: WidgetAppProps): JSX.Element {
     setIsLoading(true);
 
     try {
-      const payload = {
+      const startPayload = {
         publisherId: config.publisherId,
         articleId: config.articleId,
+        articleUrl: config.articleUrl,
+        articleHash: config.articleHash,
         amountCents: config.amountCents,
         currency: config.currency,
-        returnUrl: window.location.href,
+        returnUrl: config.returnUrl ?? window.location.href,
       };
-      const result = await createPaymentIntent(payload);
-      setPaymentId(result.paymentId);
-      onUnlocked?.(result.paymentId);
+
+      const startResult = await startPaymentSession(startPayload);
+      const completionResult = await completePaymentSession({
+        paymentId: startResult.paymentId,
+        providerEventId: `dev-${startResult.paymentId}`,
+        signature: "dev-placeholder-signature",
+      });
+
+      setPaymentId(startResult.paymentId);
+      if (completionResult.unlockToken || completionResult.processed) {
+        onUnlocked?.(startResult.paymentId);
+      }
       window.dispatchEvent(
         new CustomEvent("karticle:unlocked", {
           detail: {
-            paymentId: result.paymentId,
+            paymentId: startResult.paymentId,
             articleId: config.articleId,
             publisherId: config.publisherId,
+            articleHash: config.articleHash,
           },
         }),
       );
@@ -78,6 +93,7 @@ export function WidgetApp({ config, onUnlocked }: WidgetAppProps): JSX.Element {
           <div className="karticle-modal">
             <h2>Unlock this article</h2>
             <p>One-time purchase: {formattedPrice}</p>
+            <p className="karticle-meta">{config.articleUrl}</p>
 
             {paymentId ? (
               <p className="karticle-success">Payment confirmed: {paymentId}</p>

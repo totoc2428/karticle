@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     allowed_origins: str = Field(default="http://localhost:5173", alias="KARTICLE_ALLOWED_ORIGINS")
     unlock_token_secret: str = Field(default="change-me", alias="KARTICLE_UNLOCK_TOKEN_SECRET")
     unlock_token_ttl_days: int = Field(default=30, alias="KARTICLE_UNLOCK_TOKEN_TTL_DAYS")
+    unlock_cookie_max_age_days: int = Field(default=3650, alias="KARTICLE_UNLOCK_COOKIE_MAX_AGE_DAYS")
     payment_provider: str = Field(default="stripe", alias="KARTICLE_PAYMENT_PROVIDER")
     payment_webhook_secret: str = Field(default="change-me", alias="KARTICLE_PAYMENT_WEBHOOK_SECRET")
     payment_secret_key: str = Field(default="change-me", alias="KARTICLE_PAYMENT_SECRET_KEY")

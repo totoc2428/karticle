@@ -59,6 +59,12 @@ body {
   color: #344759;
 }
 
+.karticle-meta {
+  font-size: 0.82rem;
+  color: #607086;
+  word-break: break-word;
+}
+
 .karticle-widget-root {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
