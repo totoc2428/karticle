@@ -34,7 +34,9 @@ function resolveArticleUrl(container: HTMLElement): string {
 
 function parseConfigFromDataset(container: HTMLElement): WidgetConfig {
   const amountCents = Number(
-    readSearchParam("karticle_amount_cents") ?? container.dataset.karticleAmountCents ?? "0",
+    readSearchParam("karticle_amount_cents") ??
+      container.dataset.karticleAmountCents ??
+      "0",
   );
   const articleUrl = resolveArticleUrl(container);
   const articleHash =
@@ -54,8 +56,14 @@ function parseConfigFromDataset(container: HTMLElement): WidgetConfig {
     articleUrl,
     articleHash,
     amountCents,
-    currency: readSearchParam("karticle_currency") ?? container.dataset.karticleCurrency ?? "EUR",
-    returnUrl: readSearchParam("karticle_return_url") ?? container.dataset.karticleReturnUrl ?? articleUrl,
+    currency:
+      readSearchParam("karticle_currency") ??
+      container.dataset.karticleCurrency ??
+      "EUR",
+    returnUrl:
+      readSearchParam("karticle_return_url") ??
+      container.dataset.karticleReturnUrl ??
+      articleUrl,
     buttonLabel: container.dataset.karticleButtonLabel,
   };
 }
@@ -73,7 +81,9 @@ function mount(container: HTMLElement, config?: Partial<WidgetConfig>): void {
   mountedWidgets.set(mountId, { root, container, config: widgetConfig });
 }
 
-function remountAllWithMessageConfig(messageConfig: Partial<WidgetConfig>): void {
+function remountAllWithMessageConfig(
+  messageConfig: Partial<WidgetConfig>,
+): void {
   for (const [mountId, entry] of mountedWidgets.entries()) {
     const nextConfig: WidgetConfig = {
       ...entry.config,

@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
 export interface ArticleContext {
   publisherId: string;
@@ -51,7 +52,9 @@ async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`${init.method ?? "GET"} ${url} failed (${response.status}): ${errorText}`);
+    throw new Error(
+      `${init.method ?? "GET"} ${url} failed (${response.status}): ${errorText}`,
+    );
   }
 
   return (await response.json()) as T;
@@ -60,33 +63,42 @@ async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
 export async function startPaymentSession(
   payload: StartPaymentSessionRequest,
 ): Promise<StartPaymentSessionResponse> {
-  return requestJson<StartPaymentSessionResponse>(`${API_BASE_URL}/v1/payments/start`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  return requestJson<StartPaymentSessionResponse>(
+    `${API_BASE_URL}/v1/payments/start`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export async function completePaymentSession(
   payload: CompletePaymentSessionRequest,
 ): Promise<CompletePaymentSessionResponse> {
-  return requestJson<CompletePaymentSessionResponse>(`${API_BASE_URL}/v1/payments/complete`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  return requestJson<CompletePaymentSessionResponse>(
+    `${API_BASE_URL}/v1/payments/complete`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export async function verifyUnlock(
   payload: VerifyUnlockRequest,
 ): Promise<VerifyUnlockResponse> {
-  return requestJson<VerifyUnlockResponse>(`${API_BASE_URL}/v1/unlocks/verify`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  return requestJson<VerifyUnlockResponse>(
+    `${API_BASE_URL}/v1/unlocks/verify`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export async function createPaymentIntent(
