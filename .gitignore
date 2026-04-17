@@ -11,6 +11,7 @@ venv/
 
 # Build outputs
 frontend/dist/
+client_exemple/dist/
 frontend/.vite/
 backend/.mypy_cache/
 

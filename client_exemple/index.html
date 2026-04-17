@@ -3,72 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Article - Karticle demo</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <title>Le Quotidien - Article</title>
   </head>
   <body>
-    <main class="page-shell">
-      <article class="article-layout">
-        <header class="article-header">
-          <p class="eyebrow">Journal d’exemple</p>
-          <h1>Les conséquences de l’IA sur les rédactions européennes</h1>
-          <p class="article-meta">
-            Temps de lecture 4 min · Auteur fictif · Publié aujourd’hui
-          </p>
-        </header>
-
-        <section class="article-body">
-          <p>
-            Cet article sert de démonstration pour un paywall intégré dans un
-            site d’article classique. Le contenu complet est volontairement
-            bloqué pour illustrer le déverrouillage unitaire.
-          </p>
-
-          <div class="premium-block is-locked" data-premium-content>
-            <div class="premium-copy">
-              <h2>Contenu premium</h2>
-              <p>
-                Vous pouvez débloquer cet article à l’unité depuis le widget
-                embarqué dans l’iframe.
-              </p>
-            </div>
-
-            <div class="iframe-shell">
-              <iframe
-                id="karticle-widget-frame"
-                title="Karticle payment widget"
-                src="./widget-frame.html?karticle_publisher_id=publisher-demo&karticle_article_id=article-ai-2026&karticle_article_url=https%3A%2F%2Fjournal-demo.example%2Farticle%2Fia-redactions&karticle_article_hash=hash_article_ai_2026&karticle_amount_cents=199&karticle_currency=EUR"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-              ></iframe>
-            </div>
-          </div>
-        </section>
-      </article>
-    </main>
-
-    <script>
-      const premiumBlock = document.querySelector("[data-premium-content]");
-      window.addEventListener("message", (event) => {
-        const data = event.data;
-        if (!data || data.type !== "karticle:unlocked") {
-          return;
-        }
-
-        if (premiumBlock) {
-          premiumBlock.classList.remove("is-locked");
-          premiumBlock.classList.add("is-unlocked");
-          premiumBlock.innerHTML = `
-            <div class="premium-copy">
-              <h2>Article débloqué</h2>
-              <p>Merci. Le contenu premium est maintenant accessible.</p>
-            </div>
-            <div class="article-unlocked-note">
-              <strong>Payment ID:</strong> ${data.payload?.paymentId ?? "unknown"}
-            </div>
-          `;
-        }
-      });
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

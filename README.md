@@ -39,6 +39,6 @@ The `client_exemple/` folder contains a realistic article page that embeds the K
 
 To use it locally:
 
-1. Run `npm run build:widget` to generate the iframe bundle.
-2. Open `client_exemple/index.html` through a static web server.
+1. Run `npm run dev:client_exemple`.
+2. Open `http://localhost:4173`.
 3. The article page will reveal premium content after the iframe posts a `karticle:unlocked` message.

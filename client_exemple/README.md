@@ -1,12 +1,12 @@
 # client_exemple
 
-Example publisher site showing a locked article with a paywall widget embedded in an iframe.
+Example publisher site implemented with React + Vite, showing a locked article with a paywall widget embedded in an iframe.
 
 ## Files
 
-- `index.html`: article page with premium content blocked behind the widget iframe.
-- `widget-frame.html`: iframe host page that loads the Karticle widget bundle.
-- `styles.css`: visual styling for the article and the paywall section.
+- `src/App.tsx`: article page and paywall behavior.
+- `src/styles.css`: visual styling for the article and paywall section.
+- `public/widget-frame.html`: iframe host page that loads the Karticle widget app.
 
 ## How it works
 
@@ -17,12 +17,19 @@ Example publisher site showing a locked article with a paywall widget embedded i
 
 ## Local usage
 
-1. Build the widget bundle:
+1. Start everything from the repository root:
    ```bash
-   npm run build:widget
+   npm run dev:client_exemple
    ```
-2. Serve the repository with a static server so the HTML files can resolve relative paths.
-3. Open `client_exemple/index.html` in the browser.
+   or from inside `client_exemple/`:
+   ```bash
+   npm run dev:client_exemple
+   ```
+2. Open `http://localhost:4173` in the browser.
+
+The widget iframe loads from `http://localhost:5183` while the article app runs on `http://localhost:4173`.
+
+If one of those ports is already running, the launcher reuses the existing server instead of failing.
 
 ## Notes
 
