@@ -70,7 +70,7 @@ export function WidgetApp({ config, onUnlocked }: WidgetAppProps): JSX.Element {
         onClick={() => setIsModalOpen(true)}
         type="button"
       >
-        {config.buttonLabel ?? `Unlock this article for ${formattedPrice}`}
+        {config.buttonLabel ?? "Unlock with Karticle for €1.99"}
       </button>
 
       {isModalOpen ? (
