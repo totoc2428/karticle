@@ -1,0 +1,94 @@
+:root {
+  --karticle-primary: #014f86;
+  --karticle-primary-strong: #013a63;
+  --karticle-surface: #f8fbff;
+  --karticle-text: #1f2933;
+  --karticle-danger: #b00020;
+  --karticle-success: #0b6e4f;
+}
+
+.karticle-widget-root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.karticle-button {
+  border: none;
+  border-radius: 999px;
+  background: var(--karticle-primary);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.karticle-button:hover {
+  background: var(--karticle-primary-strong);
+}
+
+.karticle-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 9999;
+}
+
+.karticle-modal {
+  width: min(520px, 100%);
+  background: var(--karticle-surface);
+  color: var(--karticle-text);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px rgba(2, 6, 23, 0.35);
+  padding: 1.25rem;
+}
+
+.karticle-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.karticle-primary,
+.karticle-secondary {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 0.95rem;
+  cursor: pointer;
+}
+
+.karticle-primary {
+  background: var(--karticle-primary);
+  color: #fff;
+}
+
+.karticle-secondary {
+  background: #dfe7ef;
+  color: #1b2838;
+}
+
+.karticle-error {
+  color: var(--karticle-danger);
+}
+
+.karticle-success {
+  color: var(--karticle-success);
+}
+
+@media (max-width: 640px) {
+  .karticle-modal {
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .karticle-actions {
+    justify-content: stretch;
+  }
+
+  .karticle-primary,
+  .karticle-secondary {
+    flex: 1;
+  }
+}
