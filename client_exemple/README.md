@@ -11,10 +11,12 @@ Example publisher site implemented with React + Vite, showing a locked article w
 
 1. The app serves a journal index page on `/`.
 2. The premium article page is available on `/ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18`.
-3. The article page loads the widget inside an iframe from `http://localhost:5173/widget/?<article_slug>`.
+3. The article page loads the widget inside an iframe from `http://localhost:5173/widget/process/?<article_slug>`.
 4. The iframe sends only one parameter after `?`: the article slug.
-5. The widget posts a `karticle:unlocked` message to the parent page on success.
-6. The parent page removes the locked state and reveals the premium content.
+5. On desktop, clicking the widget button opens a payment popup.
+6. On mobile (or if popup is blocked), the payment continues in the iframe modal.
+7. The widget posts a `karticle:unlocked` message to the parent page on success.
+8. The parent page removes the locked state and reveals the premium content.
 
 ## Local usage
 

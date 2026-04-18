@@ -40,7 +40,7 @@ The `client_exemple/` folder contains a realistic article page that embeds the K
 Integration split:
 
 - `client_exemple` serves the article page on `http://localhost:4173`.
-- `frontend` serves the widget iframe page on `http://localhost:5173/widget/?<article_slug>`.
+- `frontend` serves the widget iframe page on `http://localhost:5173/widget/process/?<article_slug>`.
 - `client_exemple` loads the widget remotely via iframe `src`.
 
 To use it locally:

@@ -13,7 +13,7 @@ const ARTICLE_SLUG =
   "ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18";
 
 function buildWidgetFrameSrc(articleSlug: string): string {
-  const widgetUrl = new URL("/widget/", WIDGET_ORIGIN);
+  const widgetUrl = new URL("/widget/process/", WIDGET_ORIGIN);
   widgetUrl.search = `?${encodeURIComponent(articleSlug)}`;
 
   return widgetUrl.toString();

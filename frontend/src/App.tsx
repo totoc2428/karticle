@@ -16,7 +16,9 @@ function simpleHash(value: string): string {
 
 export default function App(): JSX.Element {
   const pathname = window.location.pathname;
+  const isWidgetProcessRoute = pathname.startsWith("/widget/process");
   const isWidgetRoute = pathname.startsWith("/widget");
+  const isPopupContext = Boolean(window.opener && !window.opener.closed);
 
   const rawQuery = window.location.search.startsWith("?")
     ? window.location.search.slice(1)
@@ -30,13 +32,35 @@ export default function App(): JSX.Element {
     PUBLISHER_ORIGIN,
   ).toString();
 
-  const articleUrl =
-    isWidgetRoute && document.referrer
+  const articleUrl = isWidgetProcessRoute
+    ? articleUrlFromSlug
+    : isWidgetRoute && document.referrer
       ? document.referrer
       : isWidgetRoute
         ? articleUrlFromSlug
         : window.location.href;
   const articleHash = simpleHash(articleUrl);
+
+  if (isWidgetProcessRoute) {
+    return (
+      <main className="karticle-page">
+        <section className="karticle-card">
+          <WidgetApp
+            autoOpenModal={isPopupContext}
+            config={{
+              publisherId: "publisher-demo",
+              articleId: articleSlug,
+              articleUrl,
+              articleHash,
+              amountCents: 250,
+              currency: "EUR",
+              buttonLabel: "Unlock with Karticle for €1.99",
+            }}
+          />
+        </section>
+      </main>
+    );
+  }
 
   if (isWidgetRoute) {
     return (
