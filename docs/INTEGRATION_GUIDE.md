@@ -16,7 +16,7 @@ The recommended integration is a dedicated iframe hosted in the publisher paywal
 ```html
 <iframe
   title="Karticle widget"
-  src="https://cdn.example.com/karticle/widget-frame.html?karticle_publisher_id=publisher-123&karticle_article_id=article-456&karticle_article_url=https%3A%2F%2Fpublisher.example%2Fnews%2Farticle-456&karticle_article_hash=hash_article_456&karticle_amount_cents=250&karticle_currency=EUR"
+  src="https://widget.example.com/widget/process/?publisher-news-article-456-2026-04-18"
 ></iframe>
 ```
 

@@ -11,6 +11,180 @@ body {
   margin: 0;
 }
 
+.karticle-landing {
+  min-height: 100vh;
+  padding: 2rem 1.25rem 2.5rem;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(255, 203, 107, 0.4),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 10% 85%,
+      rgba(65, 137, 230, 0.25),
+      transparent 32%
+    ),
+    linear-gradient(180deg, #f6fbff 0%, #edf4ff 100%);
+  display: grid;
+  gap: 1.2rem;
+  align-content: center;
+  justify-items: center;
+}
+
+.karticle-landing-hero {
+  width: min(980px, 100%);
+  background: #ffffff;
+  border: 1px solid #d6e4f2;
+  border-radius: 22px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  box-shadow: 0 18px 60px rgba(1, 58, 99, 0.14);
+}
+
+.karticle-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: #0b4e81;
+  font-weight: 700;
+}
+
+.karticle-landing-hero h1 {
+  margin: 0.45rem 0 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #12233a;
+}
+
+.karticle-landing-hero p {
+  max-width: 60ch;
+  margin: 0.8rem 0 0;
+  color: #30465e;
+  line-height: 1.65;
+}
+
+.karticle-landing-links {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.karticle-landing-links a {
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.karticle-landing-links a:first-child {
+  background: #014f86;
+  color: #ffffff;
+}
+
+.karticle-landing-links a:last-child {
+  background: #d9e6f8;
+  color: #123456;
+}
+
+.karticle-landing-grid {
+  width: min(980px, 100%);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.karticle-landing-grid article {
+  background: #ffffff;
+  border: 1px solid #d6e4f2;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.karticle-landing-grid h2 {
+  margin: 0;
+  color: #18324f;
+  font-size: 1.05rem;
+}
+
+.karticle-landing-grid p {
+  margin: 0.55rem 0 0;
+  color: #395472;
+  line-height: 1.6;
+  font-size: 0.93rem;
+}
+
+.karticle-auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: linear-gradient(180deg, #f5f8ff 0%, #ebf2ff 100%);
+}
+
+.karticle-auth-card {
+  width: min(520px, 100%);
+  background: #ffffff;
+  border: 1px solid #d6e4f2;
+  border-radius: 18px;
+  box-shadow: 0 16px 44px rgba(1, 58, 99, 0.12);
+  padding: 1.2rem;
+}
+
+.karticle-auth-card h1 {
+  margin: 0;
+  color: #162f4a;
+}
+
+.karticle-auth-card p {
+  margin: 0.75rem 0 0;
+  color: #354d68;
+  line-height: 1.6;
+}
+
+.karticle-auth-form {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.karticle-auth-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #213b57;
+}
+
+.karticle-auth-form input {
+  border: 1px solid #c7d6ea;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+}
+
+.karticle-auth-form button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 0.95rem;
+  background: #014f86;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.karticle-auth-links {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.karticle-auth-links a {
+  color: #0f4d85;
+  font-weight: 600;
+}
+
 .karticle-page {
   min-height: 100vh;
   display: grid;
@@ -142,6 +316,10 @@ body {
 }
 
 @media (max-width: 640px) {
+  .karticle-landing {
+    padding: 1rem 0.85rem 1.5rem;
+  }
+
   .karticle-modal-overlay {
     padding: 0;
     align-items: stretch;

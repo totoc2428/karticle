@@ -8,6 +8,15 @@
 - Payment provider: external provider (Stripe recommended) for checkout and settlement.
 - Publisher website: hosts article, embeds widget script, unlocks article on success.
 
+## Frontend routing (Vite SPA)
+
+- `/`: Karticle public landing page.
+- `/widget`: widget interface (WidgetApp core UI).
+- `/widget/process/?<article_slug>`: process route used inside publisher iframe and popup flow.
+- `/app`: publisher management entry page.
+- `/app/login`: management login page.
+- `/app/register`: management registration page.
+
 ## Iframe communication
 
 - The parent page passes article context to the iframe using query parameters or `postMessage`.
