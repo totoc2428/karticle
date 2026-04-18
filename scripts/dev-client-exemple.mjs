@@ -36,7 +36,7 @@ loadEnvFile(resolve(rootDir, ".env"));
 loadEnvFile(resolve(rootDir, ".env.local"));
 
 const widgetHost = process.env.KARTICLE_WIDGET_DNS ?? "localhost";
-const widgetPort = Number(process.env.KARTICLE_WIDGET_PORT ?? "5183");
+const widgetPort = Number(process.env.KARTICLE_WIDGET_PORT ?? "5173");
 const clientHost = process.env.KARTICLE_CLIENT_DNS ?? "localhost";
 const clientPort = Number(process.env.KARTICLE_CLIENT_PORT ?? "4173");
 const widgetOrigin = `http://${widgetHost}:${widgetPort}`;

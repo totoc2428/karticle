@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     backend_host: str = Field(default="0.0.0.0", alias="KARTICLE_BACKEND_HOST")
     backend_port: int = Field(default=8000, alias="KARTICLE_BACKEND_PORT")
     allowed_origins: str = Field(
-        default="http://localhost:4173,http://localhost:5183,http://localhost:5173",
+        default="http://localhost:4173,http://localhost:5173",
         alias="KARTICLE_ALLOWED_ORIGINS",
     )
     unlock_token_secret: str = Field(default="change-me", alias="KARTICLE_UNLOCK_TOKEN_SECRET")

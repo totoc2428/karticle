@@ -6,15 +6,15 @@ interface UnlockPayload {
 }
 
 const WIDGET_ORIGIN =
-  import.meta.env.VITE_WIDGET_ORIGIN ?? "http://localhost:5183";
+  import.meta.env.VITE_WIDGET_ORIGIN ?? "http://localhost:5173";
 const ARTICLE_PATH =
   "/ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18";
+const ARTICLE_SLUG =
+  "ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18";
 
-function buildWidgetFrameSrc(articleUrl: string): string {
-  const widgetUrl = new URL("/widget-frame.html", WIDGET_ORIGIN);
-  widgetUrl.search = new URLSearchParams({
-    karticle_article_url: articleUrl,
-  }).toString();
+function buildWidgetFrameSrc(articleSlug: string): string {
+  const widgetUrl = new URL("/widget/", WIDGET_ORIGIN);
+  widgetUrl.search = `?${encodeURIComponent(articleSlug)}`;
 
   return widgetUrl.toString();
 }
@@ -25,14 +25,7 @@ export function App(): JSX.Element {
 
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [paymentId, setPaymentId] = useState<string | null>(null);
-  const articleUrl = useMemo(
-    () => new URL(ARTICLE_PATH, window.location.origin).toString(),
-    [],
-  );
-  const widgetFrameSrc = useMemo(
-    () => buildWidgetFrameSrc(articleUrl),
-    [articleUrl],
-  );
+  const widgetFrameSrc = useMemo(() => buildWidgetFrameSrc(ARTICLE_SLUG), []);
 
   useEffect(() => {
     if (!isArticlePage) {

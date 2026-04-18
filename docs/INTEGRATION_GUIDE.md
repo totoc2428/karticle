@@ -5,9 +5,9 @@
 In local development, the recommended split is:
 
 - parent article page (`client_exemple`) on `http://localhost:4173`
-- widget iframe host page (`frontend`) on `http://localhost:5183/widget-frame.html`
+- widget iframe host page (`frontend`) on `http://localhost:5173/widget/?<article_slug>`
 
-This means the integration runs cross-origin in dev (`4173 -> 5183`) and should validate `event.origin` when receiving messages.
+This means the integration runs cross-origin in dev (`4173 -> 5173`) and should validate `event.origin` when receiving messages.
 
 ## 1. Embed the widget in an iframe
 
@@ -67,11 +67,11 @@ See `client_exemple/` for a full static example article page with a paywall ifra
 
 Its iframe target is the widget host page served by `frontend`:
 
-- `http://localhost:5183/widget-frame.html`
+- `http://localhost:5173/widget/?<article_slug>`
 
 ## 6. Troubleshooting
 
-- The widget does not render: ensure the iframe points to the widget host page (`widget-frame.html`) served by your widget app origin.
+- The widget does not render: ensure the iframe points to the widget host route (`/widget/?<article_slug>`) served by your widget app origin.
 - The article does not unlock: verify the parent page listens for the `karticle:unlocked` message.
-- The article still does not unlock in dev: verify `event.origin` exactly matches your widget origin (`http://localhost:5183` by default).
+- The article still does not unlock in dev: verify `event.origin` exactly matches your widget origin (`http://localhost:5173` by default).
 - API errors: verify CORS, API base URL, and iframe context parameters.
