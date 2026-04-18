@@ -4,16 +4,17 @@ Example publisher site implemented with React + Vite, showing a locked article w
 
 ## Files
 
-- `src/App.tsx`: article page and paywall behavior.
+- `src/App.tsx`: index page, article page, and paywall iframe behavior.
 - `src/styles.css`: visual styling for the article and paywall section.
-- `public/widget-frame.html`: iframe host page that loads the Karticle widget app.
 
 ## How it works
 
-1. The article page loads the widget inside an iframe.
-2. The iframe receives the article context via query parameters.
-3. The widget posts a `karticle:unlocked` message to the parent page on success.
-4. The parent page removes the locked state and reveals the premium content.
+1. The app serves a journal index page on `/`.
+2. The premium article page is available on `/ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18`.
+3. The article page loads the widget inside an iframe from `http://localhost:5183/widget-frame.html`.
+4. The iframe sends only one query parameter: `karticle_article_url`.
+5. The widget posts a `karticle:unlocked` message to the parent page on success.
+6. The parent page removes the locked state and reveals the premium content.
 
 ## Local usage
 
@@ -26,6 +27,7 @@ Example publisher site implemented with React + Vite, showing a locked article w
    npm run dev:client_exemple
    ```
 2. Open `http://localhost:4173` in the browser.
+3. Open the article from the index or navigate directly to `http://localhost:4173/ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18`.
 
 The widget iframe loads from `http://localhost:5183` while the article app runs on `http://localhost:4173`.
 

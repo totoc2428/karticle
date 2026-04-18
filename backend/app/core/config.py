@@ -10,7 +10,10 @@ class Settings(BaseSettings):
     env: str = Field(default="development", alias="KARTICLE_ENV")
     backend_host: str = Field(default="0.0.0.0", alias="KARTICLE_BACKEND_HOST")
     backend_port: int = Field(default=8000, alias="KARTICLE_BACKEND_PORT")
-    allowed_origins: str = Field(default="http://localhost:5173", alias="KARTICLE_ALLOWED_ORIGINS")
+    allowed_origins: str = Field(
+        default="http://localhost:4173,http://localhost:5183,http://localhost:5173",
+        alias="KARTICLE_ALLOWED_ORIGINS",
+    )
     unlock_token_secret: str = Field(default="change-me", alias="KARTICLE_UNLOCK_TOKEN_SECRET")
     unlock_token_ttl_days: int = Field(default=30, alias="KARTICLE_UNLOCK_TOKEN_TTL_DAYS")
     unlock_cookie_max_age_days: int = Field(default=3650, alias="KARTICLE_UNLOCK_COOKIE_MAX_AGE_DAYS")

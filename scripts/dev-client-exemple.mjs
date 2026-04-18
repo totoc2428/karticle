@@ -1,10 +1,46 @@
 import { spawn } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 import net from "node:net";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const npmCommand = "npm";
 const rootDir = resolve(fileURLToPath(new URL("..", import.meta.url)));
+
+function loadEnvFile(filePath) {
+  if (!existsSync(filePath)) {
+    return;
+  }
+
+  const content = readFileSync(filePath, "utf-8");
+  for (const rawLine of content.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) {
+      continue;
+    }
+
+    const separatorIndex = line.indexOf("=");
+    if (separatorIndex <= 0) {
+      continue;
+    }
+
+    const key = line.slice(0, separatorIndex).trim();
+    const value = line.slice(separatorIndex + 1).trim();
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadEnvFile(resolve(rootDir, ".env"));
+loadEnvFile(resolve(rootDir, ".env.local"));
+
+const widgetHost = process.env.KARTICLE_WIDGET_DNS ?? "localhost";
+const widgetPort = Number(process.env.KARTICLE_WIDGET_PORT ?? "5183");
+const clientHost = process.env.KARTICLE_CLIENT_DNS ?? "localhost";
+const clientPort = Number(process.env.KARTICLE_CLIENT_PORT ?? "4173");
+const widgetOrigin = `http://${widgetHost}:${widgetPort}`;
+const clientOrigin = `http://${clientHost}:${clientPort}`;
 
 function start(name, args) {
   const child = spawn(npmCommand, args, {
@@ -62,10 +98,10 @@ function isPortInUse(port) {
 
 const processes = [];
 
-const isFrontendRunning = await isPortInUse(5183);
+const isFrontendRunning = await isPortInUse(widgetPort);
 if (isFrontendRunning) {
   console.log(
-    "[karticle] frontend widget server already running on http://localhost:5183",
+    `[karticle] frontend widget server already running on ${widgetOrigin}`,
   );
 } else {
   processes.push(
@@ -75,21 +111,32 @@ if (isFrontendRunning) {
       "run",
       "dev",
       "--",
+      "--host",
+      widgetHost,
       "--port",
-      "5183",
+      String(widgetPort),
       "--strictPort",
     ]),
   );
 }
 
-const isClientRunning = await isPortInUse(4173);
+const isClientRunning = await isPortInUse(clientPort);
 if (isClientRunning) {
-  console.log(
-    "[karticle] client_exemple already running on http://localhost:4173",
-  );
+  console.log(`[karticle] client_exemple already running on ${clientOrigin}`);
 } else {
   processes.push(
-    start("client_exemple", ["--workspace", "client_exemple", "run", "dev"]),
+    start("client_exemple", [
+      "--workspace",
+      "client_exemple",
+      "run",
+      "dev",
+      "--",
+      "--host",
+      clientHost,
+      "--port",
+      String(clientPort),
+      "--strictPort",
+    ]),
   );
 }
 

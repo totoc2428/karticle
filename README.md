@@ -37,6 +37,11 @@ Implement payment provider integration in `backend/app/services/payment_provider
 
 The `client_exemple/` folder contains a realistic article page that embeds the Karticle widget in an iframe and listens for unlock events from the widget.
 
+Integration split:
+- `client_exemple` serves the article page on `http://localhost:4173`.
+- `frontend` serves the widget iframe page on `http://localhost:5183/widget-frame.html`.
+- `client_exemple` loads the widget remotely via iframe `src`.
+
 To use it locally:
 
 1. Run `npm run dev:client_exemple`.

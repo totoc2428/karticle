@@ -5,27 +5,45 @@ interface UnlockPayload {
   articleId?: string;
 }
 
-function buildWidgetFrameSrc(): string {
-  const articleUrl = encodeURIComponent(window.location.href);
-  const params = new URLSearchParams({
-    karticle_publisher_id: "publisher-demo",
-    karticle_article_id: "article-ai-2026",
-    karticle_article_url: articleUrl,
-    karticle_article_hash: "hash_article_ai_2026",
-    karticle_amount_cents: "199",
-    karticle_currency: "EUR",
-  });
+const WIDGET_ORIGIN =
+  import.meta.env.VITE_WIDGET_ORIGIN ?? "http://localhost:5183";
+const ARTICLE_PATH =
+  "/ia-et-presse-ecrite-comment-les-redactions-reconfigurent-leur-modele-editorial-2026-04-18";
 
-  return `/widget-frame.html?${params.toString()}`;
+function buildWidgetFrameSrc(articleUrl: string): string {
+  const widgetUrl = new URL("/widget-frame.html", WIDGET_ORIGIN);
+  widgetUrl.search = new URLSearchParams({
+    karticle_article_url: articleUrl,
+  }).toString();
+
+  return widgetUrl.toString();
 }
 
 export function App(): JSX.Element {
+  const pathname = window.location.pathname;
+  const isArticlePage = pathname === ARTICLE_PATH;
+
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [paymentId, setPaymentId] = useState<string | null>(null);
-  const widgetFrameSrc = useMemo(() => buildWidgetFrameSrc(), []);
+  const articleUrl = useMemo(
+    () => new URL(ARTICLE_PATH, window.location.origin).toString(),
+    [],
+  );
+  const widgetFrameSrc = useMemo(
+    () => buildWidgetFrameSrc(articleUrl),
+    [articleUrl],
+  );
 
   useEffect(() => {
+    if (!isArticlePage) {
+      return;
+    }
+
     function onMessage(event: MessageEvent): void {
+      if (event.origin !== WIDGET_ORIGIN) {
+        return;
+      }
+
       const data = event.data as
         | { type?: string; payload?: UnlockPayload }
         | undefined;
@@ -39,7 +57,67 @@ export function App(): JSX.Element {
 
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, []);
+  }, [isArticlePage]);
+
+  if (!isArticlePage && pathname !== "/") {
+    return (
+      <div className="figaro-page">
+        <header className="figaro-topbar">
+          <div className="figaro-topbar-inner">
+            <div className="figaro-logo">LE QUOTIDIEN</div>
+          </div>
+        </header>
+
+        <main className="figaro-content-wrap">
+          <section className="figaro-index-card">
+            <p className="figaro-kicker">ERREUR</p>
+            <h1 className="figaro-title">Page non trouvee</h1>
+            <p className="figaro-subtitle">
+              Retournez a la page principale du journal pour acceder a
+              l'article.
+            </p>
+            <a className="figaro-link" href="/">
+              Aller a l'index
+            </a>
+          </section>
+        </main>
+      </div>
+    );
+  }
+
+  if (!isArticlePage) {
+    return (
+      <div className="figaro-page">
+        <header className="figaro-topbar">
+          <div className="figaro-topbar-inner">
+            <div className="figaro-logo">LE QUOTIDIEN</div>
+            <nav className="figaro-nav">
+              <a href="#">Politique</a>
+              <a href="#">International</a>
+              <a href="#">Economie</a>
+              <a href="#">Culture</a>
+              <a href="#">Tech</a>
+            </nav>
+          </div>
+        </header>
+
+        <main className="figaro-content-wrap">
+          <section className="figaro-index-card">
+            <p className="figaro-kicker">A LA UNE</p>
+            <h1 className="figaro-title">Edition numerique du jour</h1>
+            <p className="figaro-subtitle">
+              Consultez les analyses de la redaction et accedez a l'article
+              premium du jour.
+            </p>
+
+            <a className="figaro-link" href={ARTICLE_PATH}>
+              Ouvrir l'article premium
+            </a>
+          </section>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="figaro-page">
@@ -47,6 +125,7 @@ export function App(): JSX.Element {
         <div className="figaro-topbar-inner">
           <div className="figaro-logo">LE QUOTIDIEN</div>
           <nav className="figaro-nav">
+            <a href="/">Accueil</a>
             <a href="#">Politique</a>
             <a href="#">International</a>
             <a href="#">Economie</a>
@@ -69,7 +148,8 @@ export function App(): JSX.Element {
           </p>
 
           <div className="figaro-meta">
-            Par Redaction Economie · Mis a jour a 08:12
+            Par Redaction Economie · Publie le 18 avril 2026 · Mis a jour a
+            08:12
           </div>
 
           <section className="figaro-body">
