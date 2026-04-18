@@ -1,5 +1,6 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+const APP_API_BASE_URL = import.meta.env.VITE_APP_API_BASE_URL ?? API_BASE_URL;
 
 export interface ArticleContext {
   publisherId: string;
@@ -45,6 +46,23 @@ export interface VerifyUnlockResponse {
   isUnlocked: boolean;
   cookieName: string;
   expiresAt?: string | null;
+}
+
+export interface PublisherLoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface PublisherRegisterRequest {
+  publisherName: string;
+  email: string;
+  password: string;
+}
+
+export interface PublisherAuthResponse {
+  token?: string;
+  publisherId?: string;
+  message?: string;
 }
 
 async function requestJson<T>(url: string, init: RequestInit): Promise<T> {
@@ -105,4 +123,30 @@ export async function createPaymentIntent(
   payload: StartPaymentSessionRequest,
 ): Promise<StartPaymentSessionResponse> {
   return startPaymentSession(payload);
+}
+
+export async function loginPublisher(
+  payload: PublisherLoginRequest,
+): Promise<PublisherAuthResponse> {
+  return requestJson<PublisherAuthResponse>(
+    `${APP_API_BASE_URL}/v1/app/login`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export async function registerPublisher(
+  payload: PublisherRegisterRequest,
+): Promise<PublisherAuthResponse> {
+  return requestJson<PublisherAuthResponse>(
+    `${APP_API_BASE_URL}/v1/app/register`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
 }

@@ -14,8 +14,8 @@
 - `/widget`: widget interface (WidgetApp core UI).
 - `/widget/process/?<article_slug>`: process route used inside publisher iframe and popup flow.
 - `/app`: publisher management entry page.
-- `/app/login`: management login page.
-- `/app/register`: management registration page.
+- `/app/login`: management login page (frontend form posting to `v1/app/login`).
+- `/app/register`: management registration page (frontend form posting to `v1/app/register`).
 
 ## Iframe communication
 

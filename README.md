@@ -15,8 +15,8 @@ Karticle is an MVP platform for single-article unlock payments on publisher webs
 - `http://localhost:5173/widget`: widget interface (same core UI as `WidgetApp`).
 - `http://localhost:5173/widget/process/?<article_slug>`: widget process route used by publisher iframe integration.
 - `http://localhost:5173/app`: management entry page.
-- `http://localhost:5173/app/login`: management login page.
-- `http://localhost:5173/app/register`: management registration page.
+- `http://localhost:5173/app/login`: management login page (POST `v1/app/login`).
+- `http://localhost:5173/app/register`: management registration page (POST `v1/app/register`).
 
 ## Quick start
 

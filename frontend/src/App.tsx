@@ -1,3 +1,12 @@
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+  type MouseEvent,
+} from "react";
+import { loginPublisher, registerPublisher } from "./services/api";
 import { WidgetApp } from "./widget/WidgetApp";
 import "./widget/styles.css";
 
@@ -27,7 +36,35 @@ function buildWidgetConfig(articleSlug: string, articleUrl: string) {
   };
 }
 
-function renderManagementPage(pathname: string): JSX.Element {
+function renderManagementPage({
+  pathname,
+  mediaName,
+  email,
+  password,
+  isSubmitting,
+  authError,
+  authSuccess,
+  onMediaNameChange,
+  onEmailChange,
+  onPasswordChange,
+  onLoginSubmit,
+  onRegisterSubmit,
+  onNavigate,
+}: {
+  pathname: string;
+  mediaName: string;
+  email: string;
+  password: string;
+  isSubmitting: boolean;
+  authError: string | null;
+  authSuccess: string | null;
+  onMediaNameChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
+  onPasswordChange: (value: string) => void;
+  onLoginSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onRegisterSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
+}): JSX.Element {
   const isLogin = pathname === "/app/login";
   const isRegister = pathname === "/app/register";
 
@@ -38,9 +75,21 @@ function renderManagementPage(pathname: string): JSX.Element {
           <h1>Page app introuvable</h1>
           <p>Choisissez une page de gestion valide pour continuer.</p>
           <div className="karticle-auth-links">
-            <a href="/app">Tableau de bord</a>
-            <a href="/app/login">Login</a>
-            <a href="/app/register">Register</a>
+            <a href="/app" onClick={(event) => onNavigate(event, "/app")}>
+              Tableau de bord
+            </a>
+            <a
+              href="/app/login"
+              onClick={(event) => onNavigate(event, "/app/login")}
+            >
+              Login
+            </a>
+            <a
+              href="/app/register"
+              onClick={(event) => onNavigate(event, "/app/register")}
+            >
+              Register
+            </a>
           </div>
         </section>
       </main>
@@ -58,8 +107,18 @@ function renderManagementPage(pathname: string): JSX.Element {
             widget.
           </p>
           <div className="karticle-auth-links">
-            <a href="/app/login">Se connecter</a>
-            <a href="/app/register">Creer un compte</a>
+            <a
+              href="/app/login"
+              onClick={(event) => onNavigate(event, "/app/login")}
+            >
+              Se connecter
+            </a>
+            <a
+              href="/app/register"
+              onClick={(event) => onNavigate(event, "/app/register")}
+            >
+              Creer un compte
+            </a>
           </div>
         </section>
       </main>
@@ -78,33 +137,68 @@ function renderManagementPage(pathname: string): JSX.Element {
 
         <form
           className="karticle-auth-form"
-          onSubmit={(event) => event.preventDefault()}
+          onSubmit={isLogin ? onLoginSubmit : onRegisterSubmit}
         >
           {!isLogin ? (
             <label>
               Nom du media
-              <input type="text" placeholder="Le Quotidien" />
+              <input
+                type="text"
+                placeholder="Le Quotidien"
+                value={mediaName}
+                onChange={(event) => onMediaNameChange(event.target.value)}
+              />
             </label>
           ) : null}
 
           <label>
             Email
-            <input type="email" placeholder="contact@media.fr" />
+            <input
+              type="email"
+              placeholder="contact@media.fr"
+              value={email}
+              onChange={(event) => onEmailChange(event.target.value)}
+              required
+            />
           </label>
 
           <label>
             Mot de passe
-            <input type="password" placeholder="********" />
+            <input
+              type="password"
+              placeholder="********"
+              value={password}
+              onChange={(event) => onPasswordChange(event.target.value)}
+              required
+            />
           </label>
 
-          <button type="submit">
-            {isLogin ? "Se connecter" : "Creer un compte"}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? "Traitement..."
+              : isLogin
+                ? "Se connecter"
+                : "Creer un compte"}
           </button>
         </form>
 
+        {authError ? (
+          <p className="karticle-auth-status error">{authError}</p>
+        ) : null}
+        {authSuccess ? (
+          <p className="karticle-auth-status success">{authSuccess}</p>
+        ) : null}
+
         <div className="karticle-auth-links">
-          <a href="/app">Retour app</a>
-          <a href={isLogin ? "/app/register" : "/app/login"}>
+          <a href="/app" onClick={(event) => onNavigate(event, "/app")}>
+            Retour app
+          </a>
+          <a
+            href={isLogin ? "/app/register" : "/app/login"}
+            onClick={(event) =>
+              onNavigate(event, isLogin ? "/app/register" : "/app/login")
+            }
+          >
             {isLogin ? "Pas de compte ? Register" : "Deja inscrit ? Login"}
           </a>
         </div>
@@ -113,7 +207,9 @@ function renderManagementPage(pathname: string): JSX.Element {
   );
 }
 
-function renderLandingPage(): JSX.Element {
+function renderLandingPage(
+  onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void,
+): JSX.Element {
   return (
     <main className="karticle-landing">
       <section className="karticle-landing-hero">
@@ -124,8 +220,12 @@ function renderLandingPage(): JSX.Element {
           achat unitaire fluide, sans imposer un abonnement immediat.
         </p>
         <div className="karticle-landing-links">
-          <a href="/widget">Voir le widget</a>
-          <a href="/app">Ouvrir l'app editeur</a>
+          <a href="/widget" onClick={(event) => onNavigate(event, "/widget")}>
+            Voir le widget
+          </a>
+          <a href="/app" onClick={(event) => onNavigate(event, "/app")}>
+            Ouvrir l'app editeur
+          </a>
         </div>
       </section>
 
@@ -157,17 +257,73 @@ function renderLandingPage(): JSX.Element {
 }
 
 export default function App(): JSX.Element {
-  const pathname = window.location.pathname;
+  const [pathname, setPathname] = useState(() => window.location.pathname);
+  const [search, setSearch] = useState(() => window.location.search);
+  const [mediaName, setMediaName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authSuccess, setAuthSuccess] = useState<string | null>(null);
+
+  const navigate = useCallback((href: string) => {
+    const target = new URL(href, window.location.origin);
+    const nextPath = `${target.pathname}${target.search}`;
+    const currentPath = `${window.location.pathname}${window.location.search}`;
+
+    if (nextPath !== currentPath) {
+      window.history.pushState({}, "", nextPath);
+      setPathname(target.pathname);
+      setSearch(target.search);
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }, []);
+
+  const onNavigate = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+      event.preventDefault();
+      navigate(href);
+    },
+    [navigate],
+  );
+
+  useEffect(() => {
+    const onPopState = () => {
+      setPathname(window.location.pathname);
+      setSearch(window.location.search);
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    setAuthError(null);
+    setAuthSuccess(null);
+  }, [pathname]);
+
   const isWidgetProcessRoute = pathname.startsWith("/widget/process");
   const isWidgetRoute = pathname.startsWith("/widget");
   const isPopupContext = Boolean(window.opener && !window.opener.closed);
 
-  const rawQuery = window.location.search.startsWith("?")
-    ? window.location.search.slice(1)
-    : "";
-  const decodedSlug = decodeURIComponent(rawQuery || DEFAULT_ARTICLE_SLUG)
-    .replace(/^\/+/, "")
-    .trim();
+  const rawQuery = search.startsWith("?") ? search.slice(1) : "";
+  const decodedSlug = useMemo(() => {
+    try {
+      return decodeURIComponent(rawQuery || DEFAULT_ARTICLE_SLUG)
+        .replace(/^\/+/, "")
+        .trim();
+    } catch {
+      return DEFAULT_ARTICLE_SLUG;
+    }
+  }, [rawQuery]);
   const articleSlug = decodedSlug || DEFAULT_ARTICLE_SLUG;
   const articleUrlFromSlug = new URL(
     `/${articleSlug}`,
@@ -180,12 +336,87 @@ export default function App(): JSX.Element {
       ? document.referrer
       : articleUrlFromSlug;
 
+  const handleLoginSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setAuthError(null);
+      setAuthSuccess(null);
+      setIsSubmitting(true);
+
+      try {
+        const result = await loginPublisher({ email, password });
+        setAuthSuccess(
+          result.message ??
+            "Connexion envoyee. Endpoint backend pret a etre branche.",
+        );
+      } catch (error) {
+        setAuthError(
+          error instanceof Error
+            ? error.message
+            : "Erreur de connexion inconnue.",
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [email, password],
+  );
+
+  const handleRegisterSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setAuthError(null);
+      setAuthSuccess(null);
+
+      if (!mediaName.trim()) {
+        setAuthError("Le nom du media est requis.");
+        return;
+      }
+
+      setIsSubmitting(true);
+      try {
+        const result = await registerPublisher({
+          publisherName: mediaName.trim(),
+          email,
+          password,
+        });
+        setAuthSuccess(
+          result.message ??
+            "Inscription envoyee. Endpoint backend pret a etre branche.",
+        );
+      } catch (error) {
+        setAuthError(
+          error instanceof Error
+            ? error.message
+            : "Erreur d'inscription inconnue.",
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [email, mediaName, password],
+  );
+
   if (pathname === "/") {
-    return renderLandingPage();
+    return renderLandingPage(onNavigate);
   }
 
   if (pathname.startsWith("/app")) {
-    return renderManagementPage(pathname);
+    return renderManagementPage({
+      pathname,
+      mediaName,
+      email,
+      password,
+      isSubmitting,
+      authError,
+      authSuccess,
+      onMediaNameChange: setMediaName,
+      onEmailChange: setEmail,
+      onPasswordChange: setPassword,
+      onLoginSubmit: handleLoginSubmit,
+      onRegisterSubmit: handleRegisterSubmit,
+      onNavigate,
+    });
   }
 
   if (isWidgetProcessRoute) {
@@ -213,5 +444,5 @@ export default function App(): JSX.Element {
     );
   }
 
-  return renderLandingPage();
+  return renderLandingPage(onNavigate);
 }
